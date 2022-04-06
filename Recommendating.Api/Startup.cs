@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.OpenApi.Models;
 
 namespace Recommendating.Api;
 
@@ -18,6 +20,17 @@ public class Startup
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo {Title = "Recommendating", Version = "v1"});
+        });
+
+        services.AddApiVersioning(o =>
+        {
+            o.AssumeDefaultVersionWhenUnspecified = true;
+            o.DefaultApiVersion = new ApiVersion(1, 0);
+            o.ReportApiVersions = true;
+            o.ApiVersionReader = ApiVersionReader.Combine(
+                new QueryStringApiVersionReader("v"),
+                new MediaTypeApiVersionReader("version")
+            );
         });
     }
 
