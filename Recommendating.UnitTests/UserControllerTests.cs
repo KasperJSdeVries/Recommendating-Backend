@@ -62,6 +62,8 @@ public class UserControllerTests
         // Assert
         var createdItem = (result.Result as CreatedAtActionResult).Value as UserDto;
         userToCreate.Should().BeEquivalentTo(createdItem, options => options.ExcludingMissingMembers());
+        createdItem.Id.Should().NotBeEmpty();
+        createdItem.CreatedDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
     }
 
     private static User CreateRandomUser()
