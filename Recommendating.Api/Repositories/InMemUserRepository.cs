@@ -19,4 +19,9 @@ public class InMemUserRepository : IUserRepository
     {
         return _users.SingleOrDefault(user => user.Id == id);
     }
+
+    public void CreateUser(User user)
+    {
+        _users.Add(user);
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Recommendating.Api.Dtos;
+using Recommendating.Api.Entities;
 using Recommendating.Api.Repositories;
 
 namespace Recommendating.Api.Controllers;
@@ -22,5 +23,21 @@ public class UserController : Controller
     {
         var user = _repository.GetUser(id);
         return user is not null ? user.AsDto() : NotFound();
+    }
+
+    [HttpPost]
+    public ActionResult<UserDto> CreateUser(CreateUserDto userDto)
+    {
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = userDto.Name,
+            Password = userDto.Password,
+            CreatedDate = DateTimeOffset.UtcNow
+        };
+
+        _repository.CreateUser(user);
+
+        return CreatedAtAction(nameof(GetUser), new {id = user.Id}, user.AsDto());
     }
 }
