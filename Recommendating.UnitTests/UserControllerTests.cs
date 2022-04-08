@@ -97,10 +97,10 @@ public class UserControllerTests
         var controller = new UserController(_repositoryStub.Object);
 
         var updatedUser = new UpdateUserNameDto(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-        
+
         // Act
         var result = controller.UpdateUserName(Guid.NewGuid(), updatedUser);
-        
+
         // Assert
         result.Should().BeOfType<NotFoundResult>();
     }
@@ -126,6 +126,69 @@ public class UserControllerTests
 
         // Assert
         result.Should().BeOfType<UnauthorizedResult>();
+    }
+
+    [Fact]
+    public void UpdatePassword_WithNonExistingUser_ReturnsNotFound()
+    {
+        // Arrange
+        var controller = new UserController(_repositoryStub.Object);
+
+        var updatedUser = new UpdateUserPasswordDto(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+
+        // Act
+        var result = controller.UpdateUserPassword(Guid.NewGuid(), updatedUser);
+
+        // Assert
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public void UpdatePassword_WithWrongUserName_ReturnsUnauthorised()
+    {
+        // Arrange
+        var existingUser = CreateRandomUser();
+
+        var existingUserId = existingUser.Id;
+        existingUser.Password = UserController.ComputeHash(existingUser.Password);
+
+        _repositoryStub.Setup(repo => repo.GetUser(It.IsAny<Guid>()))
+            .Returns(existingUser);
+
+        var controller = new UserController(_repositoryStub.Object);
+
+        var updatedUser = new UpdateUserPasswordDto(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+
+        // Act
+        var result = controller.UpdateUserPassword(existingUserId, updatedUser);
+
+        // Assert
+        result.Should().BeOfType<UnauthorizedResult>();
+    }
+
+
+    [Fact]
+    public void UpdatePassword_WithExistingUser_ReturnsNoContent()
+    {
+        // Arrange
+        var existingUserPassword = Guid.NewGuid().ToString();
+        var existingUser = CreateRandomUser();
+
+        var existingUserId = existingUser.Id;
+        existingUser.Password = UserController.ComputeHash(existingUserPassword);
+
+        _repositoryStub.Setup(repo => repo.GetUser(It.IsAny<Guid>()))
+            .Returns(existingUser);
+
+        var controller = new UserController(_repositoryStub.Object);
+
+        var updatedUser = new UpdateUserPasswordDto(existingUserPassword, Guid.NewGuid().ToString());
+
+        // Act
+        var result = controller.UpdateUserPassword(existingUserId, updatedUser);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
     }
 
     private static User CreateRandomUser()

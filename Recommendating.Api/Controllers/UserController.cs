@@ -62,6 +62,22 @@ public class UserController : Controller
         return NoContent();
     }
 
+    [HttpPut("{id}/password")]
+    public ActionResult UpdateUserPassword(Guid id, UpdateUserPasswordDto updateDto)
+    {
+        var user = _repository.GetUser(id);
+        if (user is null)
+            return NotFound();
+
+        if (user.Password != ComputeHash(updateDto.OldPassword))
+            return Unauthorized();
+
+        user.Password = ComputeHash(updateDto.NewPassword);
+        _repository.UpdateUser(user);
+
+        return NoContent();
+    }
+
     public static string ComputeHash(string data)
     {
         using var hash = SHA256.Create();
