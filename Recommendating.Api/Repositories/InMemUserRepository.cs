@@ -24,4 +24,10 @@ public class InMemUserRepository : IUserRepository
     {
         _users.Add(user);
     }
+
+    public void UpdateUser(User user)
+    {
+        var index = _users.FindIndex(existingUser => existingUser.Id == user.Id);
+        _users[index] = user;
+    }
 }

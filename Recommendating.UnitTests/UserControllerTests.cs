@@ -66,6 +66,68 @@ public class UserControllerTests
         createdItem.CreatedDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
     }
 
+    [Fact]
+    public void UpdateUserName_WithExistingUser_ReturnsNoContent()
+    {
+        // Arrange
+        var existingUserPassword = Guid.NewGuid().ToString();
+        var existingUser = CreateRandomUser();
+
+        var existingUserId = existingUser.Id;
+        existingUser.Password = UserController.ComputeHash(existingUserPassword);
+
+        _repositoryStub.Setup(repo => repo.GetUser(It.IsAny<Guid>()))
+            .Returns(existingUser);
+
+        var controller = new UserController(_repositoryStub.Object);
+
+        var updatedUser = new UpdateUserNameDto(existingUserPassword, Guid.NewGuid().ToString());
+
+        // Act
+        var result = controller.UpdateUserName(existingUserId, updatedUser);
+
+        // Assert
+        result.Should().BeOfType<NoContentResult>();
+    }
+
+    [Fact]
+    public void UpdateUserName_WithNonExistingUser_ReturnsNotFound()
+    {
+        // Arrange
+        var controller = new UserController(_repositoryStub.Object);
+
+        var updatedUser = new UpdateUserNameDto(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+        
+        // Act
+        var result = controller.UpdateUserName(Guid.NewGuid(), updatedUser);
+        
+        // Assert
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public void UpdateUserName_WithWrongPassword_ReturnsUnauthorised()
+    {
+        // Arrange
+        var existingUser = CreateRandomUser();
+
+        var existingUserId = existingUser.Id;
+        existingUser.Password = UserController.ComputeHash(existingUser.Password);
+
+        _repositoryStub.Setup(repo => repo.GetUser(It.IsAny<Guid>()))
+            .Returns(existingUser);
+
+        var controller = new UserController(_repositoryStub.Object);
+
+        var updatedUser = new UpdateUserNameDto(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+
+        // Act
+        var result = controller.UpdateUserName(existingUserId, updatedUser);
+
+        // Assert
+        result.Should().BeOfType<UnauthorizedResult>();
+    }
+
     private static User CreateRandomUser()
     {
         return new User

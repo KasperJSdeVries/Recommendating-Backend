@@ -27,6 +27,7 @@ public class UserController : Controller
         return user is not null ? user.AsDto() : NotFound();
     }
 
+    // POST /user
     [HttpPost]
     public ActionResult<UserDto> CreateUser(CreateUserDto userDto)
     {
@@ -43,7 +44,25 @@ public class UserController : Controller
         return CreatedAtAction(nameof(GetUser), new {id = user.Id}, user.AsDto());
     }
 
-    private static string ComputeHash(string data)
+    // PUT /user/{id}/name
+    [HttpPut("{id}/name")]
+    public ActionResult UpdateUserName(Guid id, UpdateUserNameDto updateDto)
+    {
+        var user = _repository.GetUser(id);
+        if (user is null)
+            return NotFound();
+
+        if (user.Password != ComputeHash(updateDto.Password))
+            return Unauthorized();
+
+        user.Name = updateDto.Name;
+
+        _repository.UpdateUser(user);
+
+        return NoContent();
+    }
+
+    public static string ComputeHash(string data)
     {
         using var hash = SHA256.Create();
         var bytes = hash.ComputeHash(Encoding.UTF8.GetBytes(data));
