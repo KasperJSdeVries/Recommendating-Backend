@@ -15,19 +15,21 @@ public class InMemUserRepository : IUserRepository
         }
     };
 
-    public User? GetUser(Guid id)
+    public Task<User?> GetUserAsync(Guid id)
     {
-        return _users.SingleOrDefault(user => user.Id == id);
+        return Task.FromResult(_users.SingleOrDefault(user => user.Id == id));
     }
 
-    public void CreateUser(User user)
+    public Task CreateUserAsync(User user)
     {
         _users.Add(user);
+        return Task.CompletedTask;
     }
 
-    public void UpdateUser(User user)
+    public Task UpdateUserAsync(User user)
     {
         var index = _users.FindIndex(existingUser => existingUser.Id == user.Id);
         _users[index] = user;
+        return Task.CompletedTask;
     }
 }

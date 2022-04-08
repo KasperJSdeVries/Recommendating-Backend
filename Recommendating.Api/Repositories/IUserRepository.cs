@@ -4,7 +4,7 @@ namespace Recommendating.Api.Repositories;
 
 public interface IUserRepository
 {
-    public User? GetUser(Guid id);
-    void CreateUser(User user);
-    void UpdateUser(User user);
+    public Task<User?> GetUserAsync(Guid id);
+    Task CreateUserAsync(User user);
+    Task UpdateUserAsync(User user);
 }

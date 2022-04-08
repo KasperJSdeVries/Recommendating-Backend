@@ -21,15 +21,15 @@ public class UserController : Controller
 
     // GET /user/{id}
     [HttpGet("{id}")]
-    public ActionResult<UserDto> GetUser(Guid id)
+    public async Task<ActionResult<UserDto>> GetUserAsync(Guid id)
     {
-        var user = _repository.GetUser(id);
+        var user = await _repository.GetUserAsync(id);
         return user is not null ? user.AsDto() : NotFound();
     }
 
     // POST /user
     [HttpPost]
-    public ActionResult<UserDto> CreateUser(CreateUserDto userDto)
+    public async Task<ActionResult<UserDto>> CreateUserAsync(CreateUserDto userDto)
     {
         var user = new User
         {
@@ -39,16 +39,17 @@ public class UserController : Controller
             CreatedDate = DateTimeOffset.UtcNow
         };
 
-        _repository.CreateUser(user);
+        await _repository.CreateUserAsync(user);
 
-        return CreatedAtAction(nameof(GetUser), new {id = user.Id}, user.AsDto());
+        // ReSharper disable once Mvc.ActionNotResolved
+        return CreatedAtAction(nameof(GetUserAsync), new {id = user.Id}, user.AsDto());
     }
 
     // PUT /user/{id}/name
     [HttpPut("{id}/name")]
-    public ActionResult UpdateUserName(Guid id, UpdateUserNameDto updateDto)
+    public async Task<ActionResult> UpdateUserNameAsync(Guid id, UpdateUserNameDto updateDto)
     {
-        var user = _repository.GetUser(id);
+        var user = await _repository.GetUserAsync(id);
         if (user is null)
             return NotFound();
 
@@ -57,15 +58,15 @@ public class UserController : Controller
 
         user.Name = updateDto.Name;
 
-        _repository.UpdateUser(user);
+        await _repository.UpdateUserAsync(user);
 
         return NoContent();
     }
 
     [HttpPut("{id}/password")]
-    public ActionResult UpdateUserPassword(Guid id, UpdateUserPasswordDto updateDto)
+    public async Task<ActionResult> UpdateUserPasswordAsync(Guid id, UpdateUserPasswordDto updateDto)
     {
-        var user = _repository.GetUser(id);
+        var user = await _repository.GetUserAsync(id);
         if (user is null)
             return NotFound();
 
@@ -73,7 +74,7 @@ public class UserController : Controller
             return Unauthorized();
 
         user.Password = ComputeHash(updateDto.NewPassword);
-        _repository.UpdateUser(user);
+        await _repository.UpdateUserAsync(user);
 
         return NoContent();
     }
