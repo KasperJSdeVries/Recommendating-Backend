@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Recommendating.Api.Dtos;
 using Recommendating.Api.Entities;
 using Recommendating.Api.Repositories;
@@ -32,12 +34,23 @@ public class UserController : Controller
         {
             Id = Guid.NewGuid(),
             Name = userDto.Name,
-            Password = userDto.Password,
+            Password = ComputeHash(userDto.Password),
             CreatedDate = DateTimeOffset.UtcNow
         };
 
         _repository.CreateUser(user);
 
         return CreatedAtAction(nameof(GetUser), new {id = user.Id}, user.AsDto());
+    }
+
+    private static string ComputeHash(string data)
+    {
+        using var hash = SHA256.Create();
+        var bytes = hash.ComputeHash(Encoding.UTF8.GetBytes(data));
+
+        var builder = new StringBuilder();
+        foreach (var b in bytes) builder.Append(b.ToString("x2"));
+
+        return builder.ToString();
     }
 }
