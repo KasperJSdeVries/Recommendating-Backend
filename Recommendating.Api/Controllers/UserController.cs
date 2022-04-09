@@ -63,6 +63,7 @@ public class UserController : Controller
         return NoContent();
     }
 
+    // PUT /{id}/password
     [HttpPut("{id}/password")]
     public async Task<ActionResult> UpdateUserPasswordAsync(Guid id, UpdateUserPasswordDto updateDto)
     {

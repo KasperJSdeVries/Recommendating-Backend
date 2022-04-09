@@ -35,7 +35,7 @@ public class UserControllerTests
     public async Task GetUserAsync_WithExistingUser_ReturnsRequestedUser()
     {
         // Arrange
-        var expectedUser = CreateRandomUser();
+        var expectedUser = TestHelpers.CreateRandomUser();
 
         _repositoryStub.Setup(repo => repo.GetUserAsync(It.IsAny<Guid>()))
             .ReturnsAsync(expectedUser);
@@ -61,10 +61,10 @@ public class UserControllerTests
         var result = await controller.CreateUserAsync(userToCreate);
 
         // Assert
-        var createdItem = (result.Result as CreatedAtActionResult).Value as UserDto;
-        userToCreate.Should().BeEquivalentTo(createdItem, options => options.ExcludingMissingMembers());
-        createdItem.Id.Should().NotBeEmpty();
-        createdItem.CreatedDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
+        var createdUser = (result.Result as CreatedAtActionResult).Value as UserDto;
+        userToCreate.Should().BeEquivalentTo(createdUser, options => options.ExcludingMissingMembers());
+        createdUser.Id.Should().NotBeEmpty();
+        createdUser.CreatedDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class UserControllerTests
     {
         // Arrange
         var existingUserPassword = Guid.NewGuid().ToString();
-        var existingUser = CreateRandomUser();
+        var existingUser = TestHelpers.CreateRandomUser();
 
         var existingUserId = existingUser.Id;
         existingUser.Password = UserController.ComputeHash(existingUserPassword);
@@ -110,7 +110,7 @@ public class UserControllerTests
     public async Task UpdateUserNameAsync_WithWrongPassword_ReturnsUnauthorised()
     {
         // Arrange
-        var existingUser = CreateRandomUser();
+        var existingUser = TestHelpers.CreateRandomUser();
 
         var existingUserId = existingUser.Id;
         existingUser.Password = UserController.ComputeHash(existingUser.Password);
@@ -148,7 +148,7 @@ public class UserControllerTests
     public async Task UpdatePasswordAsync_WithWrongUserName_ReturnsUnauthorised()
     {
         // Arrange
-        var existingUser = CreateRandomUser();
+        var existingUser = TestHelpers.CreateRandomUser();
 
         var existingUserId = existingUser.Id;
         existingUser.Password = UserController.ComputeHash(existingUser.Password);
@@ -173,7 +173,7 @@ public class UserControllerTests
     {
         // Arrange
         var existingUserPassword = Guid.NewGuid().ToString();
-        var existingUser = CreateRandomUser();
+        var existingUser = TestHelpers.CreateRandomUser();
 
         var existingUserId = existingUser.Id;
         existingUser.Password = UserController.ComputeHash(existingUserPassword);
@@ -190,16 +190,5 @@ public class UserControllerTests
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
-    }
-
-    private static User CreateRandomUser()
-    {
-        return new User
-        {
-            Id = Guid.NewGuid(),
-            Name = Guid.NewGuid().ToString(),
-            Password = Guid.NewGuid().ToString(),
-            CreatedDate = DateTimeOffset.Now
-        };
     }
 }
