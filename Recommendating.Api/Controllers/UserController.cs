@@ -20,7 +20,7 @@ public class UserController : Controller
     }
 
     // GET /user/{id}
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult<UserDto>> GetUserAsync(Guid id)
     {
         var user = await _repository.GetUserAsync(id);
@@ -46,7 +46,7 @@ public class UserController : Controller
     }
 
     // PUT /user/{id}/name
-    [HttpPut("{id}/name")]
+    [HttpPut("{id:guid}/name")]
     public async Task<ActionResult> UpdateUserNameAsync(Guid id, UpdateUserNameDto updateDto)
     {
         var user = await _repository.GetUserAsync(id);
@@ -64,7 +64,7 @@ public class UserController : Controller
     }
 
     // PUT /{id}/password
-    [HttpPut("{id}/password")]
+    [HttpPut("{id:guid}/password")]
     public async Task<ActionResult> UpdateUserPasswordAsync(Guid id, UpdateUserPasswordDto updateDto)
     {
         var user = await _repository.GetUserAsync(id);

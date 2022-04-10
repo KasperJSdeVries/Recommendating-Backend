@@ -46,7 +46,7 @@ public class MessageController : Controller
     }
 
     // GET /message/{id}
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult<Message>> GetMessageAsync(Guid id)
     {
         return Ok();
