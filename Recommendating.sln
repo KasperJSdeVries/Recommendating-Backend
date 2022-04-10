@@ -8,8 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E6557CF2-BA1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{00A29F89-305A-49F2-9DDE-459D7E58714D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recommendating.Api.Tests.Acceptance", "Recommendating.Api.Tests.Acceptance\Recommendating.Api.Tests.Acceptance.csproj", "{2EE551E2-A691-4BA5-9860-285F67A2FC97}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,14 +22,9 @@ Global
 		{54021056-08B1-4EDA-89DD-6C93EAA7530D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54021056-08B1-4EDA-89DD-6C93EAA7530D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54021056-08B1-4EDA-89DD-6C93EAA7530D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EE551E2-A691-4BA5-9860-285F67A2FC97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EE551E2-A691-4BA5-9860-285F67A2FC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EE551E2-A691-4BA5-9860-285F67A2FC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EE551E2-A691-4BA5-9860-285F67A2FC97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3D8C8BD7-FDB0-4A3C-88D5-AEFE5F423D19} = {E6557CF2-BA1E-498A-B826-CB5A88B7E7BB}
 		{54021056-08B1-4EDA-89DD-6C93EAA7530D} = {00A29F89-305A-49F2-9DDE-459D7E58714D}
-		{2EE551E2-A691-4BA5-9860-285F67A2FC97} = {00A29F89-305A-49F2-9DDE-459D7E58714D}
 	EndGlobalSection
 EndGlobal
