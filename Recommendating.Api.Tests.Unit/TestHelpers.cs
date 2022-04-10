@@ -1,7 +1,7 @@
 ﻿using System;
 using Recommendating.Api.Entities;
 
-namespace Recommendating.UnitTests;
+namespace Recommendating.Api.Tests.Unit;
 
 public static class TestHelpers
 {

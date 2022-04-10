@@ -8,7 +8,7 @@ using Recommendating.Api.Dtos;
 using Recommendating.Api.Repositories;
 using Xunit;
 
-namespace Recommendating.UnitTests;
+namespace Recommendating.Api.Tests.Unit.Controllers;
 
 public class MessageControllerTests
 {
@@ -48,10 +48,10 @@ public class MessageControllerTests
         var messageToCreate = new CreateMessageDto(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid().ToString());
 
         var controller = new MessageController(_messageRepositoryStub.Object, _userRepositoryStub.Object);
-        
+
         // Act
         var result = await controller.CreateMessageAsync(messageToCreate);
-        
+
         // Assert
         result.Result.Should().BeOfType<NotFoundResult>();
     }

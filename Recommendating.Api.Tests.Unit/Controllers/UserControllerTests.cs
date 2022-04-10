@@ -9,7 +9,7 @@ using Recommendating.Api.Entities;
 using Recommendating.Api.Repositories;
 using Xunit;
 
-namespace Recommendating.UnitTests;
+namespace Recommendating.Api.Tests.Unit.Controllers;
 
 public class UserControllerTests
 {
