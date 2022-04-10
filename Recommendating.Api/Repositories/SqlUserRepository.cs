@@ -6,27 +6,44 @@ namespace Recommendating.Api.Repositories;
 
 public class SqlUserRepository : IUserRepository
 {
-    private readonly DataContext _dataContext;
+    private readonly DataContext _context;
 
     public SqlUserRepository(DataContext dataContext)
     {
-        _dataContext = dataContext;
+        _context = dataContext;
     }
-    
+
     public async Task<User?> GetUserAsync(Guid id)
     {
-        return await _dataContext.Users.SingleOrDefaultAsync(user => user.Id == id);
+        return await _context.Users.SingleOrDefaultAsync(user => user.Id == id);
     }
 
-    public async Task CreateUserAsync(User user)
+    public async Task<bool> CreateUserAsync(User user)
     {
-        await _dataContext.Users.AddAsync(user);
-        await _dataContext.SaveChangesAsync();
+        await _context.Users.AddAsync(user);
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (DbUpdateException)
+        {
+            return false;
+        }
     }
 
-    public async Task UpdateUserAsync(User user)
+    public async Task<bool> UpdateUserAsync(User user)
     {
-        _dataContext.Users.Update(user);
-        await _dataContext.SaveChangesAsync();
+        _context.Users.Update(user);
+        try
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (DbUpdateException)
+        {
+            return false;
+        }
     }
 }

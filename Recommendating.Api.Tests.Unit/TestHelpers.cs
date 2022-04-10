@@ -12,7 +12,7 @@ public static class TestHelpers
             Id = Guid.NewGuid(),
             Name = Guid.NewGuid().ToString(),
             Password = Guid.NewGuid().ToString(),
-            CreatedDate = DateTimeOffset.Now
+            CreatedDate = DateTimeOffset.UtcNow
         };
     }
 }
