@@ -8,9 +8,9 @@ public class SqlUserRepository : IUserRepository
 {
     private readonly DataContext _context;
 
-    public SqlUserRepository(DataContext dataContext)
+    public SqlUserRepository(DataContext context)
     {
-        _context = dataContext;
+        _context = context;
     }
 
     public async Task<User?> GetUserAsync(Guid id)
