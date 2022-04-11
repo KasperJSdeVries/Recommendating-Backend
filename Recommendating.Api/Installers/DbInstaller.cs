@@ -16,5 +16,6 @@ public class DbInstaller : IInstaller
         );
 
         services.AddScoped<IUserRepository, SqlUserRepository>();
+        services.AddScoped<IMessageRepository, SqlMessageRepository>();
     }
 }

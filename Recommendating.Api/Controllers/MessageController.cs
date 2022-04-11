@@ -47,8 +47,9 @@ public class MessageController : Controller
 
     // GET /message/{id}
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<Message>> GetMessageAsync(Guid id)
+    public async Task<ActionResult<MessageDto>> GetMessageAsync(Guid id)
     {
-        return Ok();
+        var message = await _messageRepository.GetMessageAsync(id);
+        return message is not null ? message.AsDto() : NotFound();
     }
 }

@@ -5,10 +5,10 @@ namespace Recommendating.Api.Data;
 
 public class DataContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<Message> Messages { get; set; }
-
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
     }
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Message?> Messages { get; set; }
 }

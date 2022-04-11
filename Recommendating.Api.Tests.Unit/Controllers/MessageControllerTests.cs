@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Recommendating.Api.Controllers;
 using Recommendating.Api.Dtos;
+using Recommendating.Api.Entities;
 using Recommendating.Api.Repositories;
 using Xunit;
 
@@ -18,10 +19,10 @@ public class MessageControllerTests
     [Fact]
     public async Task CreateMessageAsync_WithValidMessage_ReturnsCreatedMessage()
     {
+        // Arrange
         var sendingUser = TestHelpers.CreateRandomUser();
         var receivingUser = TestHelpers.CreateRandomUser();
 
-        // Arrange
         _userRepositoryStub.Setup(repo => repo.GetUserAsync(It.Is<Guid>(id => id == sendingUser.Id)))
             .ReturnsAsync(sendingUser);
         _userRepositoryStub.Setup(repo => repo.GetUserAsync(It.Is<Guid>(id => id == receivingUser.Id)))
@@ -54,5 +55,26 @@ public class MessageControllerTests
 
         // Assert
         result.Result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task GetMessageAsync_WithExistingMessage_ReturnsRequestedMessage()
+    {
+        // Arrange
+        var expectedMessage = TestHelpers.CreateRandomMessage();
+
+        _messageRepositoryStub.Setup(repo => repo.GetMessageAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(expectedMessage);
+
+        var controller = new MessageController(_messageRepositoryStub.Object, _userRepositoryStub.Object);
+
+        // Act
+        var result = await controller.GetMessageAsync(Guid.NewGuid());
+        
+        // Assert
+        result.Value.Should().BeEquivalentTo(expectedMessage, options => options
+            .ComparingByMembers<MessageDto>()
+            .ExcludingMissingMembers()
+        );
     }
 }

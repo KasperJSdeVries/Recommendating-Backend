@@ -4,5 +4,6 @@ namespace Recommendating.Api.Repositories;
 
 public interface IMessageRepository
 {
-    Task CreateMessageAsync(Message message);
+    Task<bool> CreateMessageAsync(Message? message);
+    Task<Message?> GetMessageAsync(Guid id);
 }

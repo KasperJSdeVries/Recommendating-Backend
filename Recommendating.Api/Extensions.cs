@@ -10,7 +10,7 @@ public static class Extensions
         return new UserDto(user.Id, user.Name, user.CreatedDate);
     }
 
-    public static MessageDto AsDto(this Message message)
+    public static MessageDto AsDto(this Message? message)
     {
         return new MessageDto(
             message.Id,

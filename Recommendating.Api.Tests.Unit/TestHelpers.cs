@@ -15,4 +15,17 @@ public static class TestHelpers
             CreatedDate = DateTimeOffset.UtcNow
         };
     }
+
+    public static Message CreateRandomMessage()
+    {
+        return new Message
+        {
+            Id = Guid.NewGuid(),
+            Receiver = CreateRandomUser(),
+            Sender = CreateRandomUser(),
+            SentDate = DateTimeOffset.UtcNow,
+            Status = MessageStatus.Sent,
+            Text = Guid.NewGuid().ToString()
+        };
+    }
 }
