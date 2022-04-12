@@ -22,15 +22,7 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "recommendating v1"));
-
-            app.UseHttpsRedirection();
-        }
+        if (env.IsDevelopment()) app.UseHttpsRedirection();
 
         app.UseRouting();
 

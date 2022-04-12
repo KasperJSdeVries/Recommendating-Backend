@@ -1,16 +1,9 @@
-﻿using Microsoft.OpenApi.Models;
-
-namespace Recommendating.Api.Installers;
+﻿namespace Recommendating.Api.Installers;
 
 public class MvcInstaller : IInstaller
 {
     public void InstallServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
-        
-        services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo {Title = "Recommendating", Version = "v1"});
-        });
     }
 }
