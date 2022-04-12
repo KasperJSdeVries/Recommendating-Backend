@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Recommendating.Api.Controllers;
 using Recommendating.Api.Dtos;
-using Recommendating.Api.Entities;
 using Recommendating.Api.Repositories;
 using Xunit;
 
